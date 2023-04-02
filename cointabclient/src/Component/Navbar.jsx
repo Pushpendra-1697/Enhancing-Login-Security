@@ -79,7 +79,7 @@ const Navbar = () => {
                                     <MenuDivider />
                                     <MenuItem> <Link to="/" className='Link'>Home</Link> </MenuItem>
                                     <MenuItem><Link to="/login" className='Link'>Login</Link></MenuItem>
-                                    <MenuItem><Link to="/signup" className='Link'>New User?</Link></MenuItem>
+                                    <MenuItem><Link to="/register" className='Link'>New User?</Link></MenuItem>
                                     <MenuItem className='Link'><Button onClick={handleLogout} variant={"outline"} bg="black" color={"red"}>Logout</Button></MenuItem>
                                 </MenuList>
                             </Menu>
