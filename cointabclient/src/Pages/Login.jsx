@@ -14,6 +14,8 @@ const initialState = {
 const Login = () => {
   const [formData, setFormData] = useState(initialState);
   const navigate = useNavigate();
+  const [wrongPassword, setWrongPassword] = useState(0);
+
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -32,13 +34,16 @@ const Login = () => {
       let res = await fetch(`${backend_url}/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData)
       });
       res = await res.json();
       if (res) {
-        if (res.msg === "Wrong Password" || res.msg === "Wrong Email ID") {
+        if (res.msg === "Wrong Password") {
+          setWrongPassword(wrongPassword + 1);
+          alert(`${res.msg}`);
+        } else if (res.msg === "Wrong Email ID") {
           alert(`${res.msg}`);
         } else if (res.msg === "Login Successful") {
           localStorage.setItem('email', formData.email);
@@ -71,7 +76,7 @@ const Login = () => {
           <i class="fa fa-key icon"></i>
           <Input className='input-field' w="300px" type={"password"} value={password} name="password" placeholder='Password' onChange={handleChange} />
         </Box>
-        <Input w="300px" style={{ backgroundColor: "blue", color: "white", border: "none", borderRadius: "10px", padding: "10px" }} type={"submit"} />
+        {wrongPassword < 5 ? <Input w="300px" style={{ backgroundColor: "blue", color: "white", border: "none", borderRadius: "10px", padding: "10px" }} type={"submit"} /> : null}
       </form>
       <p style={{ marginTop: "14px" }}>or continue with these social profile</p>
 
