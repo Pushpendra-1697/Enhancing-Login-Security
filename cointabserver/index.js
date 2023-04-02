@@ -6,10 +6,8 @@ require('dotenv').config();
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 const { connection } = require('./Configs/Config');
-const { UserRouter } = require('./Routes/user.route');
-
-// const { HomeRouter } = require('./Routes/dashboard.route');
-
+const { registerRoute } = require('./Routes/register.route');
+const { loginRoute } = require('./Routes/login.route');
 
 //Inbuilt middlewares;
 app.use(cors());
@@ -20,9 +18,8 @@ app.get('/', async (req, res) => {
     res.send('Welcome in Cointab');
 });
 
-app.use('/', UserRouter);
-// app.use('/home', HomeRouter);
-
+app.use('/', registerRoute);
+app.use('/', loginRoute);
 
 httpServer.listen(PORT, async () => {
     try {

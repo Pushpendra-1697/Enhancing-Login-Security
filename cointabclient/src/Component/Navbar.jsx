@@ -25,16 +25,17 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 const Navbar = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     const navigate = useNavigate();
-    // const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('');
 
+    useEffect(() => {
+        setEmail(localStorage.getItem('email'));
+    }, [email]);
 
+    
     const handleLogout = () => {
-        navigate('/login')
+        localStorage.removeItem("email");
+        navigate('/login');
     };
-
-    // useEffect(() => {
-    //     setEmail(localStorage.getItem('email') || "Pushpendra Singh");
-    // }, [email]);
 
     return (
         <>
@@ -73,7 +74,7 @@ const Navbar = () => {
                                     </Center>
                                     <br />
                                     <Center>
-                                        {/* <p>{email}</p> */}
+                                        <p>{email}</p>
                                     </Center>
                                     <br />
                                     <MenuDivider />
