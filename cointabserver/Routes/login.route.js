@@ -1,34 +1,26 @@
-
 const { Router } = require('express');
 const loginRoute = Router();
 const bcrypt = require('bcrypt');
 const { UserModel } = require('../Models/user.model');
-// console.log(wrongAttemps);
 
-var wrongAttemps = 5;
-const { rateLimit } = require('express-rate-limit');
-//API RATE LIMIT use for amount of time and no. of req valid for your application
-const limiter = rateLimit({
-    max: wrongAttemps, //no. of req users can make with in time
-    windowMs: 60000  // time frame in (ms)
-});
-console.log(wrongAttemps);
 
-loginRoute.use(limiter);
-
+var count = 0;
 loginRoute.post('/login', async (req, res) => {
-    const ip = req.ip;
     const { email, password } = req.body;
+    var today = new Date();
+    var time = today.getHours();
 
     try {
-        console.log(ip);
         const user = await UserModel.find({ email });
         if (user.length > 0) {
-            bcrypt.compare(password, user[0].password, (err, results) => {
+            bcrypt.compare(password, user[0].password, async (err, results) => {
                 if (results) {
                     res.status(200).send({ msg: "Login Successful" });
                 } else {
-                    wrongAttemps--;
+                    count++;
+                    if (count == 5) {
+                        await UserModel.updateOne({ email }, { $set: { time } });
+                    }
                     res.status(201).send({ msg: "Wrong Password" });
                 }
             });
@@ -40,17 +32,26 @@ loginRoute.post('/login', async (req, res) => {
     }
 });
 
+loginRoute.get('/get', async (req, res) => {
+    var today = new Date();
+    var time = today.getHours();
+    const { email } = req.headers;
+
+    try {
+        const user = await UserModel.find({ email });
+        let p = Number(user[0].time) || 0;
+        if ((time - p) >= 24 && user[0].time !== undefined) {
+            res.send({ msg: "Not Blocked" });
+        } else if ((time - p) < 24 && user[0].time !== undefined) {
+            res.send({ msg: "Blocked" });
+        } else {
+            res.send({ msg: "Login Successful" });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 module.exports = { loginRoute };
 
 
-
-
-// app.get('/', async (req, res) => {
-//     const ip = req.ip;
-//     console.log(ip);
-//     try {
-//         res.status(200).send({ msg: "Successfully get IP" });
-//     } catch (err) {
-//         res.status(404).send({ Error: `Error getting IP ${err.message}` });
-//     }
-// });

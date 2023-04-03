@@ -11,16 +11,17 @@ const initialState = {
   password: ''
 };
 
+
 const Login = () => {
   const [formData, setFormData] = useState(initialState);
   const navigate = useNavigate();
-  const [wrongPassword, setWrongPassword] = useState(0);
 
 
   const handleChange = (e) => {
     let { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +30,25 @@ const Login = () => {
       alert('Please Fill * required Field')
       return;
     };
+
+
+    try {
+      let res = await fetch(`${backend_url}/get`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "email": email
+        }
+      });
+      res = await res.json();
+      if (res.msg == "Blocked") {
+        alert(`You are Blocked for 24 Hours`);
+        return;
+      };
+    } catch (err) {
+      console.log(err);
+    };
+
 
     try {
       let res = await fetch(`${backend_url}/login`, {
@@ -41,7 +61,6 @@ const Login = () => {
       res = await res.json();
       if (res) {
         if (res.msg === "Wrong Password") {
-          setWrongPassword(wrongPassword + 1);
           alert(`${res.msg}`);
         } else if (res.msg === "Wrong Email ID") {
           alert(`${res.msg}`);
@@ -50,7 +69,7 @@ const Login = () => {
           alert(`${res.msg}`);
           navigate('/');
         }
-      }
+      };
 
       setFormData({
         email: '',
@@ -63,6 +82,7 @@ const Login = () => {
 
 
   const { email, password } = formData;
+
   return (
     <Box style={{ textAlign: 'center' }}>
       <Heading mb="10px" style={{ textAlign: "center" }}>Login For Existing Users</Heading>
@@ -76,7 +96,9 @@ const Login = () => {
           <i class="fa fa-key icon"></i>
           <Input className='input-field' w="300px" type={"password"} value={password} name="password" placeholder='Password' onChange={handleChange} />
         </Box>
-        {wrongPassword < 5 ? <Input w="300px" style={{ backgroundColor: "blue", color: "white", border: "none", borderRadius: "10px", padding: "10px" }} type={"submit"} /> : null}
+
+        <Input w="300px" style={{ backgroundColor: "blue", color: "white", border: "none", borderRadius: "10px", padding: "10px" }} type={"submit"} />
+
       </form>
       <p style={{ marginTop: "14px" }}>or continue with these social profile</p>
 
