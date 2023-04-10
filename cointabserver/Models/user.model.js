@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const userSchema = new Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
-    time: String
+    BlockedTime: Number
 }, {
     versionKey: false
 });
