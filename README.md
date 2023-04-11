@@ -1,4 +1,5 @@
-# cointab
+# Enhancing Login Security with Account Lockout Feature
+Enhancing Login Security with Account Lockout Feature: This project involves adding a feature to a login system that automatically locks a user's account for a specified amount of time after a certain number of failed login attempts. This improves the security of the login system by preventing brute force attacks and unauthorized access.
 
 # Tech Stack:
 React for client side
