@@ -90,7 +90,6 @@ const Login = () => {
         <Box className='input-icons'>
           <i class="fa fa-envelope icon"></i>
           <Input className='input-field' w="300px" type={"email"} placeholder="Email" value={email} name="email" onChange={handleChange} />
-          {email.includes('@gmail.com') == false ? <Text color={"red"}>Invalid Email*</Text> : null}
         </Box>
         <Box className='input-icons'>
           <i class="fa fa-key icon"></i>
