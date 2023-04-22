@@ -9,8 +9,8 @@ Chakra-ui Library for styling purpose
 # Vercel Frontend Deploye Link:
 https://cointabclient.vercel.app
 
-# Cyclic Backend Deploye Link: 
-https://real-tan-prawn-belt.cyclic.app/
+# Render Backend Deploye Link: 
+https://cointab-uoqq.onrender.com/
 
 # Some Project Screenshots:
 
